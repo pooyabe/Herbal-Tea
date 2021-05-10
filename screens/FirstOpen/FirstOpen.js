@@ -10,26 +10,11 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import LottieView from "lottie-react-native";
-import * as Font from "expo-font";
+
 
 export default class FirstOpen extends React.Component {
-  state = {
-    fontsLoaded: false,
-  };
-
-  async loadFonts() {
-    await Font.loadAsync({
-      Kalameh: {
-        uri: require("../../assets/font/Kalameh.ttf"),
-      },
-    });
-    this.setState({ fontsLoaded: true });
-  }
-
   componentDidMount() {
     this.animation.play();
-
-    this.loadFonts();
   }
 
   resetAnimation = () => {
