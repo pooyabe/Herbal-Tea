@@ -10,10 +10,26 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import LottieView from "lottie-react-native";
+import * as Font from "expo-font";
 
 export default class FirstOpen extends React.Component {
+  state = {
+    fontsLoaded: false,
+  };
+
+  async loadFonts() {
+    await Font.loadAsync({
+      Kalameh: {
+        uri: require("../../assets/font/Kalameh.ttf"),
+      },
+    });
+    this.setState({ fontsLoaded: true });
+  }
+
   componentDidMount() {
     this.animation.play();
+
+    this.loadFonts();
   }
 
   resetAnimation = () => {
@@ -44,7 +60,7 @@ export default class FirstOpen extends React.Component {
               />
             </View>
             <TextInput
-              placeholder={"0912..."}
+              placeholder={"شماره موبایل"}
               placeholderTextColor={"white"}
               style={styles.InputText}
               keyboardType={"phone-pad"}
@@ -58,7 +74,7 @@ export default class FirstOpen extends React.Component {
               />
             </View>
             <TextInput
-              placeholder={"Password"}
+              placeholder={"رمزعبور"}
               placeholderTextColor={"white"}
               style={styles.InputText}
               secureTextEntry={true}
@@ -108,7 +124,7 @@ const styles = StyleSheet.create({
     top: 0,
   },
   FormInput: {
-    height: 25 + "%",
+    height: 27 + "%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
@@ -138,6 +154,7 @@ const styles = StyleSheet.create({
     width: 80 + "%",
     color: "#fff",
     fontSize: 18,
+    fontFamily: "Kalameh",
   },
   FormButton: {
     borderRadius: 30,
@@ -149,9 +166,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fc2e2e",
     textAlign: "center",
+    fontFamily: "Kalameh",
   },
   Forgot: {
-    color: 'white',
-    textDecorationLine: 'underline'
-  }
+    color: "white",
+    textDecorationLine: "underline",
+    fontFamily: "Kalameh",
+  },
 });
