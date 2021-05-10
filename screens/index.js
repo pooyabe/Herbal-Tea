@@ -11,7 +11,7 @@ export default function Index() {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem("@logged_in");
-      if (value !== null && value) {
+      if (value !== null && value != '0') {
         setLogged(1);
       } else {
         setLogged(0);
