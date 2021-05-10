@@ -8,6 +8,7 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+screens/TestPage/
 
 # macOS
 .DS_Store

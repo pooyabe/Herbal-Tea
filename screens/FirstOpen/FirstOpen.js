@@ -13,6 +13,11 @@ import LottieView from "lottie-react-native";
 
 
 export default class FirstOpen extends React.Component {
+  state = {
+    PhoneNumber: '',
+    Password: '',
+    SignInButtonText: 'ورود / ثبت‌نام'
+  }
   componentDidMount() {
     this.animation.play();
   }
@@ -22,7 +27,23 @@ export default class FirstOpen extends React.Component {
     this.animation.play();
   };
 
+  getPhoneInputValue = (value) => {
+    this.setState({PhoneNumber: value});
+  }
+  getPasswordInputValue = (value) =>{
+    this.setState({Password: value});
+  }
+
+  signIn = () => {
+    this.setState({SignInButtonText: 'لطفا صبر کنید...'});
+    console.log(`
+      Phone Number: ${this.state.PhoneNumber} \n
+      Password : ${this.state.Password}
+    `);
+  }
+
   render() {
+    const { SignInButtonText } = this.state;
     return (
       <View style={styles.container}>
         <LinearGradient
@@ -49,6 +70,7 @@ export default class FirstOpen extends React.Component {
               placeholderTextColor={"white"}
               style={styles.InputText}
               keyboardType={"phone-pad"}
+              onChangeText={this.getPhoneInputValue}
             />
           </View>
           <View style={styles.InputContainer}>
@@ -63,11 +85,15 @@ export default class FirstOpen extends React.Component {
               placeholderTextColor={"white"}
               style={styles.InputText}
               secureTextEntry={true}
+              onChangeText={this.getPasswordInputValue}
             />
           </View>
 
-          <TouchableOpacity style={styles.FormButton}>
-            <Text style={styles.FormButtonText}>ورود / ثبت‌نام</Text>
+          <TouchableOpacity
+          style={styles.FormButton}
+          onPress={this.signIn}
+          >
+            <Text style={styles.FormButtonText}>{SignInButtonText}</Text>
           </TouchableOpacity>
         </View>
         <Text style={styles.Forgot}>بازیابی رمزعبور</Text>
