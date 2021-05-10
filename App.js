@@ -1,6 +1,7 @@
-import React from 'react';
+import React from "react";
 import * as Font from "expo-font";
-import Index from './screens/index';
+import Index from "./screens/index";
+import FirstLoading from "./screens/LoadingPage/FirstLoading";
 
 export default class App extends React.Component {
   state = {
@@ -21,6 +22,10 @@ export default class App extends React.Component {
   }
 
   render() {
-    return <Index />;
+    if (this.state.fontsLoaded) {
+      return <Index />;
+    }else{
+      return <FirstLoading />
+    }
   }
 }
