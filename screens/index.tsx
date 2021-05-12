@@ -11,6 +11,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./FirstOpen/Login";
 import FirstLoading from "./LoadingPage/FirstLoading";
 import ConfirmCode from "./FirstOpen/Confirm";
+import Sizes from './Pages/Sizes'
 
 const Stack = createStackNavigator();
 
@@ -42,7 +43,7 @@ export default function Index() {
 
   if (Loaded) {
     if (Logged) {
-      return <Test />;
+      return <Sizes />;
     } else {
       return (
         <NavigationContainer>

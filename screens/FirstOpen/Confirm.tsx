@@ -6,6 +6,7 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  DevSettings,
 } from "react-native";
 import { styles } from "./styles";
 import { NavigationContainer } from "@react-navigation/native";
@@ -19,7 +20,7 @@ export default class Confirm extends React.Component {
   state = {
     InputCode: "",
     SignInButtonText: "بررسی",
-    checkLogin: ""
+    checkLogin: "",
   };
 
   constructor(props) {
@@ -42,18 +43,18 @@ export default class Confirm extends React.Component {
   checkCodeRecived = () => {
     const code = this.props.route.params.code;
     const input = this.state.InputCode;
-    if(code.length == 4 &&  input.length == 4){
-        if(code == input){
-            AsyncStorage.setItem("@logged_in", "1");
-            this.setState({checkLogin: "1"});
-            console.log("Ok");
-        }
+    console.log(input);
+    if (code == input) {
+      AsyncStorage.setItem("@logged_in", "1");
+      this.setState({ checkLogin: "1" });
+      DevSettings.reload();
     }
   };
 
   render() {
     const { SignInButtonText } = this.state;
     const { navigation } = this.props;
+    console.log(this.props.route.params.code);
     return (
       <View style={styles.container}>
         <LinearGradient

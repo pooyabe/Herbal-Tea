@@ -58,7 +58,8 @@ export default class FirstOpen extends React.Component {
 
       this.sendCodeToPhoneNumber(URL)
         .then((result) => {
-          this.props.navigation.navigate("ConfirmCode",{
+      this.setState({ SignInButtonText: "ورود / ثبت‌نام" });
+      this.props.navigation.navigate("ConfirmCode",{
             code: MESSAGE
           });
         })
