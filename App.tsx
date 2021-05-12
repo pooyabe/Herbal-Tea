@@ -3,7 +3,6 @@ import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
 import Index from "./screens/index";
-import FirstLoading from "./screens/LoadingPage/FirstLoading";
 
 export default class App extends React.Component {
   state = {

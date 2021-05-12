@@ -1,8 +1,18 @@
 import React, { useState } from "react";
-import FirstOpen from "./FirstOpen/FirstOpen";
-import FirstLoading from "./LoadingPage/FirstLoading";
-import Test from "./TestPage/test";
+import { Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+
+/* 
+  Screens
+*/
+import Login from "./FirstOpen/Login";
+import FirstLoading from "./LoadingPage/FirstLoading";
+import ConfirmCode from "./FirstOpen/Confirm";
+
+const Stack = createStackNavigator();
 
 export default function Index() {
   const [Logged, setLogged] = useState(0);
@@ -11,7 +21,7 @@ export default function Index() {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem("@logged_in");
-      if (value !== null && value != '0') {
+      if (value !== null && value != "0") {
         setLogged(1);
       } else {
         setLogged(0);
@@ -29,11 +39,23 @@ export default function Index() {
       setLoad(0);
     }
   );
+
   if (Loaded) {
     if (Logged) {
       return <Test />;
     } else {
-      return <FirstOpen />;
+      return (
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="ConfirmCode" component={ConfirmCode} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
     }
   } else {
     return <FirstLoading />;
