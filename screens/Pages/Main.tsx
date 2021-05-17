@@ -11,7 +11,10 @@ const Tab = createBottomTabNavigator();
 export default function Index() {
   return (
     <>
-      <Tab.Navigator initialRouteName="Sizes">
+      <Tab.Navigator
+        initialRouteName="Sizes"
+        backBehavior="initialRoute"
+      >
         <Tab.Screen name="Chart" component={Chart} />
         <Tab.Screen name="Sizes" component={Sizes} />
         <Tab.Screen name="SendPic" component={SendPic} />
