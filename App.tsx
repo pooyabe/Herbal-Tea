@@ -31,7 +31,7 @@ export default class App extends React.Component {
       SplashScreen.hideAsync();
     }
   }
-  UNSAFE_componentWillMount() {
+  componentDidMount() {
     this.loadFonts();
   }
 
