@@ -8,8 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { styles } from "./styles";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { StackActions } from "@react-navigation/native";
 
 import { LinearGradient } from "expo-linear-gradient";
 import LottieView from "lottie-react-native";
@@ -58,10 +57,16 @@ export default class FirstOpen extends React.Component {
 
       this.sendCodeToPhoneNumber(URL)
         .then((result) => {
-      this.setState({ SignInButtonText: "ورود / ثبت‌نام" });
-      this.props.navigation.navigate("ConfirmCode",{
-            code: MESSAGE
+          this.setState({ SignInButtonText: "ورود / ثبت‌نام" });
+          this.props.navigation.navigate('Index', {
+            screen: 'ConfirmCode',
+            params: {
+              code: MESSAGE
+            }
           });
+          /* this.props.navigation.push('ConfirmCode', {
+            code: MESSAGE,
+          }); */
         })
         .catch((err) => {
           console.log(err);
@@ -117,8 +122,6 @@ export default class FirstOpen extends React.Component {
             <Text style={styles.FormButtonText}>{SignInButtonText}</Text>
           </TouchableOpacity>
         </View>
-
-        <StatusBar hidden={true} />
       </View>
     );
   }

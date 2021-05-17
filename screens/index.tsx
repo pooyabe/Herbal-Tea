@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text } from "react-native";
+import { StatusBar, Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -9,9 +9,9 @@ import { createStackNavigator } from "@react-navigation/stack";
   Screens
 */
 import Login from "./FirstOpen/Login";
-import FirstLoading from "./LoadingPage/FirstLoading";
 import ConfirmCode from "./FirstOpen/Confirm";
-import Sizes from './Pages/Sizes'
+import Sizes from "./Pages/Sizes";
+import FirstLoading from "./LoadingPage/FirstLoading";
 
 const Stack = createStackNavigator();
 
@@ -42,22 +42,27 @@ export default function Index() {
   );
 
   if (Loaded) {
-    if (Logged) {
-      return <Sizes />;
-    } else {
-      return (
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="ConfirmCode" component={ConfirmCode} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      );
-    }
+    return (
+      <>
+        <StatusBar hidden={true} />
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+            animationEnabled: false,
+            detachPreviousScreen: true,
+          }}
+        >
+          {Logged ? (
+            <Stack.Screen name="Sizes" component={Sizes} />
+          ) : (
+            <>
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="ConfirmCode" component={ConfirmCode} />
+            </>
+          )}
+        </Stack.Navigator>
+      </>
+    );
   } else {
     return <FirstLoading />;
   }

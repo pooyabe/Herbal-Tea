@@ -9,12 +9,11 @@ import {
   DevSettings,
 } from "react-native";
 import { styles } from "./styles";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 
 import { LinearGradient } from "expo-linear-gradient";
 import LottieView from "lottie-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StackActions } from '@react-navigation/native';
 
 export default class Confirm extends React.Component {
   state = {
@@ -43,18 +42,25 @@ export default class Confirm extends React.Component {
   checkCodeRecived = () => {
     const code = this.props.route.params.code;
     const input = this.state.InputCode;
-    console.log(input);
     if (code == input) {
       AsyncStorage.setItem("@logged_in", "1");
-      this.setState({ checkLogin: "1" });
-      DevSettings.reload();
+
+      this.props.navigation.navigate('Index', {
+        screen: 'Index'
+      });
+
     }
   };
 
   render() {
     const { SignInButtonText } = this.state;
     const { navigation } = this.props;
+    
+    
     console.log(this.props.route.params.code);
+    
+    
+    
     return (
       <View style={styles.container}>
         <LinearGradient
@@ -93,14 +99,12 @@ export default class Confirm extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("Login");
+              navigation.popToTop();
             }}
           >
             <Text>بازگشت</Text>
           </TouchableOpacity>
         </View>
-
-        <StatusBar hidden={true} />
       </View>
     );
   }
