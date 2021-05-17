@@ -10,7 +10,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 */
 import Login from "./FirstOpen/Login";
 import ConfirmCode from "./FirstOpen/Confirm";
-import Sizes from "./Pages/Sizes";
+import Main from "./Pages/Main";
 import FirstLoading from "./LoadingPage/FirstLoading";
 
 const Stack = createStackNavigator();
@@ -53,7 +53,7 @@ export default function Index() {
           }}
         >
           {Logged ? (
-            <Stack.Screen name="Sizes" component={Sizes} />
+            <Stack.Screen name="Main" component={Main} />
           ) : (
             <>
               <Stack.Screen name="Login" component={Login} />
