@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  StatusBar,
   Text,
   View,
   TextInput,
@@ -64,9 +63,6 @@ export default class FirstOpen extends React.Component {
               code: MESSAGE
             }
           });
-          /* this.props.navigation.push('ConfirmCode', {
-            code: MESSAGE,
-          }); */
         })
         .catch((err) => {
           console.log(err);
@@ -74,6 +70,10 @@ export default class FirstOpen extends React.Component {
     }
   };
 
+
+  /* 
+    TODO: Complete SMS send
+  */
   sendCodeToPhoneNumber = async (URL) => {
     return "OK";
     /* try {

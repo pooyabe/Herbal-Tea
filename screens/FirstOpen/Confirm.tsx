@@ -62,6 +62,9 @@ export default class Confirm extends React.Component {
     const { SignInButtonText } = this.state;
     const { navigation } = this.props;
 
+  /* 
+    TODO: Clear this Shit
+  */
     console.log(this.props.route.params.code);
 
     return (
@@ -115,7 +118,7 @@ export default class Confirm extends React.Component {
           action={{
             label: "X",
             onPress: () => {
-              this.onDismissSnackBar
+              this.onDismissSnackBar;
             },
           }}
         >

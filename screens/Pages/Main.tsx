@@ -1,3 +1,7 @@
+/* 
+    TODO: Apply some style to TABS
+*/
+
 import React from "react";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -11,10 +15,7 @@ const Tab = createBottomTabNavigator();
 export default function Index() {
   return (
     <>
-      <Tab.Navigator
-        initialRouteName="Sizes"
-        backBehavior="initialRoute"
-      >
+      <Tab.Navigator initialRouteName="Sizes" backBehavior="initialRoute">
         <Tab.Screen name="Chart" component={Chart} />
         <Tab.Screen name="Sizes" component={Sizes} />
         <Tab.Screen name="SendPic" component={SendPic} />

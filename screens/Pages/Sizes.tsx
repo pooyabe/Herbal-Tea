@@ -12,7 +12,9 @@ export default class Sizes extends React.Component {
     ran: 0,
   };
 
-
+  /* 
+    TODO: Complete this Function and Send data to DATABASE
+  */
   sendData = () => {
     console.log(this.state.shekam);
     console.log(this.state.kamar);
