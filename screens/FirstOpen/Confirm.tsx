@@ -13,13 +13,15 @@ import { styles } from "./styles";
 import { LinearGradient } from "expo-linear-gradient";
 import LottieView from "lottie-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StackActions } from '@react-navigation/native';
+
+import { Snackbar } from "react-native-paper";
 
 export default class Confirm extends React.Component {
   state = {
     InputCode: "",
     SignInButtonText: "بررسی",
     checkLogin: "",
+    visibleSnak: false,
   };
 
   constructor(props) {
@@ -45,22 +47,23 @@ export default class Confirm extends React.Component {
     if (code == input) {
       AsyncStorage.setItem("@logged_in", "1");
 
-      this.props.navigation.navigate('Index', {
-        screen: 'Index'
+      this.props.navigation.navigate("Index", {
+        screen: "Index",
       });
-
+    } else {
+      this.onShowSnackBar();
     }
   };
+
+  onShowSnackBar = () => this.setState({ visibleSnak: true });
+  onDismissSnackBar = () => this.setState({ visibleSnak: false });
 
   render() {
     const { SignInButtonText } = this.state;
     const { navigation } = this.props;
-    
-    
+
     console.log(this.props.route.params.code);
-    
-    
-    
+
     return (
       <View style={styles.container}>
         <LinearGradient
@@ -105,6 +108,19 @@ export default class Confirm extends React.Component {
             <Text>بازگشت</Text>
           </TouchableOpacity>
         </View>
+
+        <Snackbar
+          visible={this.state.visibleSnak}
+          onDismiss={this.onDismissSnackBar}
+          action={{
+            label: "X",
+            onPress: () => {
+              this.onDismissSnackBar
+            },
+          }}
+        >
+          رمز وارد شده اشتباه است!
+        </Snackbar>
       </View>
     );
   }
