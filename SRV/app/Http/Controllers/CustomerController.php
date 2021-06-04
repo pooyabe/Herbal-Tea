@@ -7,24 +7,38 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function request($phone)
     {
-        //
-    }
+        /**
+         * 
+         *  Set content type of page
+         * 
+         * */
+        header('Content-type: application-json');
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        /* 
+         *
+         * Check if user registered before
+         * 
+         * */
+        $Check = Customer::where('phone', $phone)->count();
+
+        /**
+         * Create and store code for User
+         */
+        $STORED['status'] = 0;
+
+        if (!$Check) {
+            $STORED['status'] = $this->store($phone);
+        } else {
+            $STORED['status'] = $this->code($phone);
+        }
+
+
+        /**
+         * Return the result in json format
+         */
+        return json_encode($STORED['status']);
     }
 
     /**
@@ -33,53 +47,55 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($phone)
     {
-        //
+        $Customer = new Customer;
+
+        $Customer->phone = $phone;
+        $Customer->Code = '';
+
+        try {
+
+            $Customer->save();
+            /**
+             * Create new Validation Code for new User
+             */
+            return $this->code($phone);
+        } catch (\Throwable $th) {
+            return redirect()->route('home');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Customer $customer)
+    private function code($phone)
     {
-        //
+        /**
+         * Create 4 digit random code
+         */
+        $digits = 4;
+        $THE_CODE = rand(pow(10, $digits - 1), pow(10, $digits) - 1);
+
+        /**
+         * Store Code in DataBase
+         */
+        try {
+            Customer::where('phone', $phone)
+                ->update(['Code' => $THE_CODE]);
+
+            /**
+             * 
+             * Send Code with SMS
+             * 
+             */
+            return $this->send_code($phone, $THE_CODE);
+
+        } catch (\Throwable $th) {
+            return redirect()->route('home');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Customer $customer)
+    private function send_code($phone, $code)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Customer $customer)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Customer $customer)
-    {
-        //
+        //TODO : Send SMS In This function
+        return 1;
     }
 }

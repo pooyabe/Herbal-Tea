@@ -15,4 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+})->name('home');
+
+Route::prefix('/customer')->name('customer.')->group(function(){
+    Route::get('login-request/{phone}', [\App\Http\Controllers\CustomerController::class, 'request'])->name('request');
 });
