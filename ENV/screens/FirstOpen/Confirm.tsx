@@ -42,16 +42,41 @@ export default class Confirm extends React.Component {
   };
 
   checkCodeRecived = () => {
-    const code = this.props.route.params.code;
-    const input = this.state.InputCode;
-    if (code == input) {
-      AsyncStorage.setItem("@logged_in", "1");
+    this.setState({ SignInButtonText: "لطفا صبر کنید..." });
 
-      this.props.navigation.navigate("Index", {
-        screen: "Index",
+    const RECEPTOR = this.props.route.params.phone;
+
+    const input = this.state.InputCode;
+
+    //FIXME: Replace the address with server on production
+    const URL = `http://192.168.1.107:8000/customer/validate/${RECEPTOR}/${input}`;
+
+    this.validateTheCode(URL)
+      .then((result) => {
+        if (result) {
+          this.setState({ SignInButtonText: "درحال ورود..." });
+          AsyncStorage.setItem("@logged_in", "1");
+
+          this.props.navigation.navigate("Index", {
+            screen: "Index",
+          });
+        } else {
+          this.setState({ SignInButtonText: "بررسی" });
+          this.onShowSnackBar();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    } else {
-      this.onShowSnackBar();
+  };
+
+  validateTheCode = async (URL) => {
+    try {
+      let response = await fetch(URL);
+      let json = await response.json();
+      return json;
+    } catch (error) {
+      return error;
     }
   };
 
@@ -61,11 +86,6 @@ export default class Confirm extends React.Component {
   render() {
     const { SignInButtonText } = this.state;
     const { navigation } = this.props;
-
-  /* 
-    TODO: Clear this Shit
-  */
-    console.log(this.props.route.params.code);
 
     return (
       <View style={styles.container}>
@@ -103,6 +123,8 @@ export default class Confirm extends React.Component {
           >
             <Text style={styles.FormButtonText}>{SignInButtonText}</Text>
           </TouchableOpacity>
+
+          {/* FIXME: Style this button */}
           <TouchableOpacity
             onPress={() => {
               navigation.popToTop();

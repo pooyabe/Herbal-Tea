@@ -51,6 +51,9 @@ export default class FirstOpen extends React.Component {
           this.setState({ SignInButtonText: "ورود / ثبت‌نام" });
           this.props.navigation.navigate("Index", {
             screen: "ConfirmCode",
+            params: {
+              phone: RECEPTOR
+            }
           });
         })
         .catch((err) => {
