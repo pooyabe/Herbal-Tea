@@ -59,9 +59,33 @@ class SizeController extends Controller
     public function show(Request $request)
     {
         $DATA = Size::where('phone', $request->phone)->get();
-        if($DATA->count() > 0){
-            return $DATA;
-        }else{
+
+        if ($DATA->count() > 0) {
+            $Shekam = [];
+            $Kamar = [];
+            $Bazoo = [];
+            $Ran = [];
+            $i = 0;
+
+            foreach ($DATA as $value) {
+                $Shekam[$i] = $value['Shekam'];
+                $Kamar[$i] = $value['Kamar'];
+                $Bazoo[$i] = $value['Bazoo'];
+                $Ran[$i] = $value['Ran'];
+
+
+                $i++;
+            }
+
+            $OUT = [
+                'Shekam' => $Shekam,
+                'Kamar' => $Kamar,
+                'Ran' => $Ran,
+                'Bazoo' => $Bazoo
+            ];
+            
+            return json_encode($OUT);
+        } else {
             return 0;
         }
     }
