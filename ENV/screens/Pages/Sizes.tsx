@@ -19,9 +19,6 @@ export default class Sizes extends React.Component {
   onShowSnackBar = () => this.setState({ visibleSnak: true });
   onDismissSnackBar = () => this.setState({ visibleSnak: false });
 
-  /* 
-    TODO: Complete this Function and Send data to DATABASE
-  */
   collectData = async () => {
     this.setState({ sendButtonText: "لطفا صبر کنید..." });
 
