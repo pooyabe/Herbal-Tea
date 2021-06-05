@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Size extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'Skekam',
+        'Bazoo',
+        'Kamar',
+        'Ran'
+    ];
+
 }
