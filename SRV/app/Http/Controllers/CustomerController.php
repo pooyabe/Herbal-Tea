@@ -106,15 +106,22 @@ class CustomerController extends Controller
      */
     public function validation($phone, $code)
     {
+        /**
+         * 
+         *  Set content type of page
+         * 
+         * */
+        header('Content-type: application-json');
+
         /* 
          * Check if user registered before
          * */
         $Check = Customer::where('phone', $phone)->get('Code')[0]->Code;
 
         if($Check == $code){
-            return 1;
+            return json_encode(1);
         }else{
-            return 0;
+            return json_encode(0);
         }
     }
 }
