@@ -57,6 +57,8 @@ export default class Confirm extends React.Component {
           this.setState({ SignInButtonText: "درحال ورود..." });
           AsyncStorage.setItem("@logged_in", "1");
 
+          AsyncStorage.setItem("@phone", String(RECEPTOR));
+
           this.props.navigation.navigate("Index", {
             screen: "Index",
           });
