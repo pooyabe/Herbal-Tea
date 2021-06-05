@@ -1,33 +1,65 @@
 import React from "react";
-import { View, ImageBackground, Dimensions, StyleSheet } from "react-native";
+import {
+  View,
+  ScrollView,
+  Dimensions,
+  StyleSheet,
+  SafeAreaView,
+  RefreshControl,
+} from "react-native";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { LineChart } from "react-native-chart-kit";
-import { Title, RadioButton } from "react-native-paper";
+import { Title, Snackbar } from "react-native-paper";
 
 export default class Chart extends React.Component {
   state = {
-    datas: null,
-    chart_type: "Kamar",
-    show_data: [0],
+    /**
+     * These are data recived from server
+     */
+    shekamData: [0],
+    bazooData: [0],
+    ranData: [0],
+    kamarData: [0],
+
+    /**
+     * This is for check refreshing the page
+     */
+    refreshing: false,
+
+    /**
+     * Clearly for snackBar
+     */
+    snackText: "",
+    visibleSnak: false,
   };
 
   componentDidMount() {
+    /**
+     * Call the function that receives data from server
+     */
     this.collectData();
   }
 
-  showData = (r, type) => {
-    this.setState({ show_data: r[type] });
-  };
-
+  /**
+   * Receive data from server
+   */
   collectData = async () => {
     const PHONE_NUMBER = await AsyncStorage.getItem("@phone");
 
+    /**
+     * Call fetch data function
+     */
     await this.sendData(PHONE_NUMBER).then((res) => {
+      // If user didn't submited any data, server will return 0
       if (res != 0) {
-        this.setState({ datas: res });
-
-        this.showData(res, this.state.chart_type);
+        this.setState({
+          shekamData: res["Shekam"],
+          bazooData: res["Bazoo"],
+          ranData: res["Ran"],
+          kamarData: res["Kamar"],
+        });
       }
     });
   };
@@ -45,13 +77,43 @@ export default class Chart extends React.Component {
     }
   };
 
+  /**
+   * Function for check refreshing page
+   */
+  _onRefresh() {
+    this.setState({
+      refreshing: true,
+      snackText: "داده ها به روز رسانی شدند",
+    });
+
+    this.collectData().then(() => {
+
+      this.setState({ refreshing: false });
+
+      this.onShowSnackBar();
+
+    });
+  }
+
+  /**
+   * Control the snack bar
+   */
+  onShowSnackBar = () => this.setState({ visibleSnak: true });
+  onDismissSnackBar = () => this.setState({ visibleSnak: false });
+
   render() {
+
+    /**
+     * Chart configurations
+     */
+
     const chartConfig = {
-      backgroundColor: "#ffffff",
-      backgroundGradientFrom: "#ffffff",
-      backgroundGradientTo: "#ffffff",
-      color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-      labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+      backgroundColor: "#e26a00",
+      backgroundGradientFrom: "#fb8c00",
+      backgroundGradientTo: "#ffa726",
+      decimalPlaces: 2, // optional, defaults to 2dp
+      color: (opacity = 1) => `rgba(250, 255, 255, ${opacity})`,
+      labelColor: (opacity = 1) => `rgba(250, 255, 255, ${opacity})`,
       propsForDots: {
         r: "5",
         strokeWidth: "2",
@@ -59,60 +121,135 @@ export default class Chart extends React.Component {
       },
     };
 
-
-    const imageBG = require("../../assets/image/running-woman-2.jpg");
-
-
-    const { show_data, chart_type } = this.state;
+    // States
+    const { shekamData, ranData, bazooData, kamarData, snackText } = this.state;
     return (
-      <ImageBackground style={pageStyle.container} source={imageBG}>
-        <LineChart
-          data={{
-            datasets: [
-              {
-                data: show_data,
-              },
-            ],
-          }}
-          width={Dimensions.get("window").width} // from react-native
-          height={250}
-          yAxisSuffix="CM"
-          chartConfig={chartConfig}
-          style={pageStyle.chart}
-          bezier
-        />
-        <Title style={{ direction: "rtl", textAlign: "center" }}>
-          جدول تغییرات سایز شما
-        </Title>
-        <RadioButton.Group
-          onValueChange={(value) => {
-            this.setState({ chart_type: value });
-            this.showData(this.state.datas, value);
-          }}
-          value={chart_type}
+      <SafeAreaView style={pageStyle.container}>
+        <ScrollView
+          style={pageStyle.scrollView}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          }
         >
-          <RadioButton.Item label="دور کمر" value="Kamar" />
-          <RadioButton.Item label="دور ران" value="Ran" />
-          <RadioButton.Item label="دور بازو" value="Bazoo" />
-          <RadioButton.Item label="دور شکم" value="Shekam" style={pageStyle.Radios}/>
-        </RadioButton.Group>
-      </ImageBackground>
+          <View style={pageStyle.box}>
+            <Title style={{ direction: "rtl", textAlign: "center" }}>
+              تغییرات سایز کمر
+            </Title>
+            <LineChart
+              data={{
+                datasets: [
+                  {
+                    data: kamarData,
+                  },
+                ],
+              }}
+              width={Dimensions.get("window").width * 0.9} // from react-native
+              height={180}
+              yAxisSuffix="CM"
+              chartConfig={chartConfig}
+              style={pageStyle.chart}
+              bezier
+            />
+          </View>
+
+          <View style={pageStyle.box}>
+            <Title style={{ direction: "rtl", textAlign: "center" }}>
+              تغییرات دور بازو
+            </Title>
+            <LineChart
+              data={{
+                datasets: [
+                  {
+                    data: bazooData,
+                  },
+                ],
+              }}
+              width={Dimensions.get("window").width * 0.9} // from react-native
+              height={180}
+              yAxisSuffix="CM"
+              chartConfig={chartConfig}
+              style={pageStyle.chart}
+              bezier
+            />
+          </View>
+
+          <View style={pageStyle.box}>
+            <Title style={{ direction: "rtl", textAlign: "center" }}>
+              تغییرات دور ران
+            </Title>
+            <LineChart
+              data={{
+                datasets: [
+                  {
+                    data: ranData,
+                  },
+                ],
+              }}
+              width={Dimensions.get("window").width * 0.9} // from react-native
+              height={180}
+              yAxisSuffix="CM"
+              chartConfig={chartConfig}
+              style={pageStyle.chart}
+              bezier
+            />
+          </View>
+
+          <View style={pageStyle.box}>
+            <Title style={{ direction: "rtl", textAlign: "center" }}>
+              تغییرات سایز شکم
+            </Title>
+            <LineChart
+              data={{
+                datasets: [
+                  {
+                    data: shekamData,
+                  },
+                ],
+              }}
+              width={Dimensions.get("window").width * 0.9} // from react-native
+              height={180}
+              yAxisSuffix="CM"
+              chartConfig={chartConfig}
+              style={pageStyle.chart}
+              bezier
+            />
+          </View>
+        </ScrollView>
+        <Snackbar
+          visible={this.state.visibleSnak}
+          onDismiss={this.onDismissSnackBar}
+          action={{
+            label: "X",
+            onPress: () => {
+              this.onDismissSnackBar;
+            },
+          }}
+        >
+          {snackText}
+        </Snackbar>
+      </SafeAreaView>
     );
   }
 }
 
 const pageStyle = StyleSheet.create({
   container: {
-
-    height: 100 + "%",
-    resizeMode: "stretch",
-    alignItems: "center",
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "#ffffff",
   },
   chart: {
-    marginVertical: 8,
-    borderRadius: 16,
-  },Radios:{
-    direction: "rtl",
-    textAlign: "right",
-  }
+    borderRadius: 10,
+  },
+  scrollView: {
+    marginHorizontal: 10,
+    marginVertical: 20,
+  },
+  box: {
+    marginTop: 50,
+  },
 });
