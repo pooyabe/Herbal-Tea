@@ -56,8 +56,13 @@ class SizeController extends Controller
      * @param  \App\Models\Size  $size
      * @return \Illuminate\Http\Response
      */
-    public function show(Size $size)
+    public function show(Request $request)
     {
-        //
+        $DATA = Size::where('phone', $request->phone)->get();
+        if($DATA->count() > 0){
+            return $DATA;
+        }else{
+            return 0;
+        }
     }
 }
