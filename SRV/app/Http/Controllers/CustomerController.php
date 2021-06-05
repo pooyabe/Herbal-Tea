@@ -98,4 +98,23 @@ class CustomerController extends Controller
         //TODO : Send SMS In This function
         return 1;
     }
+
+    /**
+     * 
+     * Get code from user to vaildate
+     * 
+     */
+    public function validation($phone, $code)
+    {
+        /* 
+         * Check if user registered before
+         * */
+        $Check = Customer::where('phone', $phone)->get('Code')[0]->Code;
+
+        if($Check == $code){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
 }

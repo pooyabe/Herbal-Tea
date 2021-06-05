@@ -18,5 +18,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::prefix('/customer')->name('customer.')->group(function(){
-    Route::get('login-request/{phone}', [\App\Http\Controllers\CustomerController::class, 'request'])->name('request');
+    Route::get('login-request/{phone}', [\App\Http\Controllers\CustomerController::class, 'request']);
+
+    Route::get('validate/{phone}/{code}', [\App\Http\Controllers\CustomerController::class, 'validation']);
 });
