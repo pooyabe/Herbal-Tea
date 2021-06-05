@@ -42,7 +42,7 @@ export default class Sizes extends React.Component {
       ran != 0
     ) {
       this.sendData(PHONE_NUMBER, shekam, kamar, bazoo, ran).then((r) => {
-        if (r) {
+        if (r == 1) {
           /**
            * 
            * Sent successfully. reset form data
@@ -55,6 +55,9 @@ export default class Sizes extends React.Component {
             bazoo: null,
             ran: null,
           });
+          this.onShowSnackBar();
+        }else if(r == 2){
+          this.setState({ snackText: "شما قبلا داده‌های امروز را وارد کرده‌اید." });
           this.onShowSnackBar();
         } else {
           this.setState({ snackText: "اتصال اینترنت خود را بررسی کنید." });
