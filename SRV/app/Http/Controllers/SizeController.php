@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Size;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SizeController extends Controller
@@ -20,20 +21,32 @@ class SizeController extends Controller
          */
         header('Content-type: application-json');
 
-        $NEW_DATA = new Size;
+        /**
+         * Check for same day data
+         */
+        $CHECK = Size::where('phone', $request->phone)->whereDate('created_at', date('Y-m-d'))->count();
 
-        // SET DATA RECEIVED
-        $NEW_DATA->phone = $request->phone;
-        $NEW_DATA->Shekam = $request->shekam;
-        $NEW_DATA->Bazoo = $request->bazoo;
-        $NEW_DATA->Kamar = $request->kamar;
-        $NEW_DATA->Ran = $request->ran;
+        // return $TODAY;
+        if ($CHECK == 0) {
+            $NEW_DATA = new Size;
 
-        try {
-            $NEW_DATA->save();
-            return 1;
-        } catch (\Throwable $th) {
-            return 0;
+            // SET DATA RECEIVED
+            $NEW_DATA->phone = $request->phone;
+            $NEW_DATA->Shekam = $request->shekam;
+            $NEW_DATA->Bazoo = $request->bazoo;
+            $NEW_DATA->Kamar = $request->kamar;
+            $NEW_DATA->Ran = $request->ran;
+
+
+            try {
+                $NEW_DATA->save();
+                return 1;
+            } catch (\Throwable $th) {
+                return 0;
+            }
+        } else {
+            //2 means two times data in one day!
+            return 2;
         }
     }
 
@@ -47,5 +60,4 @@ class SizeController extends Controller
     {
         //
     }
-
 }
