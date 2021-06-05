@@ -8,26 +8,6 @@ use Illuminate\Http\Request;
 class SizeController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -35,7 +15,26 @@ class SizeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        /**
+         * Set header type to json
+         */
+        header('Content-type: application-json');
+
+        $NEW_DATA = new Size;
+
+        // SET DATA RECEIVED
+        $NEW_DATA->phone = $request->phone;
+        $NEW_DATA->Shekam = $request->shekam;
+        $NEW_DATA->Bazoo = $request->bazoo;
+        $NEW_DATA->Kamar = $request->kamar;
+        $NEW_DATA->Ran = $request->ran;
+
+        try {
+            $NEW_DATA->save();
+            return 1;
+        } catch (\Throwable $th) {
+            return 0;
+        }
     }
 
     /**
@@ -49,37 +48,4 @@ class SizeController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Size  $size
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Size $size)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Size  $size
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Size $size)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Size  $size
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Size $size)
-    {
-        //
-    }
 }

@@ -35,6 +35,6 @@ Route::prefix('/customer')->name('customer.')->group(function () {
      * Customer data management
      */
     Route::prefix('/data')->name('data.')->group(function () {
-        // Route::get('sizes/{phone}/{shekam}/{kamar}/{bazoo}/{ran}', [\App\Http\Controllers])
+        Route::get('sizes/{phone}/{shekam}/{kamar}/{bazoo}/{ran}', [\App\Http\Controllers\SizeController::class, 'store']);
     });
 });
