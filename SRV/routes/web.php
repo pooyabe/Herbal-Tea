@@ -17,8 +17,24 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::prefix('/customer')->name('customer.')->group(function(){
+/**
+ * Customers funtions
+ */
+Route::prefix('/customer')->name('customer.')->group(function () {
+
+    /**
+     * User Registration, valifation and login.
+     */
+
     Route::get('login-request/{phone}', [\App\Http\Controllers\CustomerController::class, 'request']);
 
     Route::get('validate/{phone}/{code}', [\App\Http\Controllers\CustomerController::class, 'validation']);
+
+
+    /**
+     * Customer data management
+     */
+    Route::prefix('/data')->name('data.')->group(function () {
+        // Route::get('sizes/{phone}/{shekam}/{kamar}/{bazoo}/{ran}', [\App\Http\Controllers])
+    });
 });
