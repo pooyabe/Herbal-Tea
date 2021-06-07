@@ -14,94 +14,44 @@ class PictureController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Picture  $picture
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Picture $picture)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Picture  $picture
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Picture $picture)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Picture  $picture
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Picture $picture)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Picture  $picture
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Picture $picture)
-    {
-        //
+        return view('file-upload');
     }
 
     public function upload(Request $req)
     {
+        /**
+         * 
+         *  Set content type of page
+         * 
+         * */
+        header('Content-type: application/json');
+
         $req->validate([
-            'file' => 'required|mimes:csv,txt,xlx,xls,pdf|max:2048'
+            'file' => 'required|image|max:12000'
         ]);
 
-        $fileModel = new File;
+        $fileModel = new Picture;
+        $out['status'] = 0;
 
         if ($req->file()) {
             $fileName = time() . '_' . $req->file->getClientOriginalName();
-            $filePath = $req->file('file')->storeAs('uploads', $fileName, 'public');
+            $filePath = $req->file->move(public_path('images'), $fileName);
 
+            $fileModel->phone = '09184004491';
             $fileModel->name = time() . '_' . $req->file->getClientOriginalName();
             $fileModel->file_path = '/storage/' . $filePath;
             $fileModel->save();
 
-            return back()
-                ->with('success', 'File has been uploaded.')
-                ->with('file', $fileName);
+            $out['status'] = 1;
         }
+
+        return json_encode($out);
+    }
+
+    public function csrf()
+    {
+        header("Content-type: application/json");
+
+        return json_encode(csrf_token());
     }
 }

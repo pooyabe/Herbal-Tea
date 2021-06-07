@@ -37,10 +37,8 @@ Route::prefix('/customer')->name('customer.')->group(function () {
     Route::prefix('/data')->name('data.')->group(function () {
         Route::get('sizes/{phone}/{shekam}/{kamar}/{bazoo}/{ran}', [\App\Http\Controllers\SizeController::class, 'store']);
         
-        
         Route::get('show-sizes/{phone}', [\App\Http\Controllers\SizeController::class, 'show']);
 
-        Route::post('upload-image', [\App\Http\Controllers\PictureController::class, 'upload']);
-
+        Route::post('/upload-file', [\App\Http\Controllers\PictureController::class, 'upload']);
     });
 });
