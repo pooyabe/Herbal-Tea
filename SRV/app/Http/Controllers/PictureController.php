@@ -39,7 +39,7 @@ class PictureController extends Controller
 
             $fileModel->phone = '09184004491';
             $fileModel->name = time() . '_' . $req->file->getClientOriginalName();
-            $fileModel->file_path = '/storage/' . $filePath;
+            $fileModel->file_path = '/public/images/' . $filePath;
             $fileModel->save();
 
             $out['status'] = 1;
