@@ -39,5 +39,8 @@ Route::prefix('/customer')->name('customer.')->group(function () {
         
         
         Route::get('show-sizes/{phone}', [\App\Http\Controllers\SizeController::class, 'show']);
+
+        Route::post('upload-image', [\App\Http\Controllers\PictureController::class, 'upload']);
+
     });
 });
