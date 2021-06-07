@@ -31,8 +31,8 @@ class PictureController extends Controller
         ]);
 
         $fileModel = new Picture;
-        $out['status'] = 0;
 
+        
         if ($req->file()) {
             $fileName = time() . '_' . $req->file->getClientOriginalName();
             $filePath = $req->file->move(public_path('images'), $fileName);
