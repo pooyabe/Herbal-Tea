@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { Text, View, TextInput, Image, TouchableOpacity } from "react-native";
 import { styles } from "./styles";
 import { StackActions } from "@react-navigation/native";
 
@@ -47,20 +41,18 @@ export default class FirstOpen extends React.Component {
     ) {
       this.setState({ SignInButtonText: "لطفا صبر کنید..." });
 
-      const API_KEY =
-        "644B6F654E6D765A3746416773563665657441746E3030676B383250694763475A734C775234762B3848673D";
       const RECEPTOR = this.state.PhoneNumber;
-      const MESSAGE = this.random_code(1000, 9999);
 
-      const URL = `https://api.kavenegar.com/v1/${API_KEY}/sms/send.json?receptor=${RECEPTOR}&message=${MESSAGE}`;
+      //FIXME: Replace the address with server on production
+      const URL = `http://192.168.1.107:8000/customer/login-request/${RECEPTOR}`;
 
       this.sendCodeToPhoneNumber(URL)
         .then((result) => {
           this.setState({ SignInButtonText: "ورود / ثبت‌نام" });
-          this.props.navigation.navigate('Index', {
-            screen: 'ConfirmCode',
+          this.props.navigation.navigate("Index", {
+            screen: "ConfirmCode",
             params: {
-              code: MESSAGE
+              phone: RECEPTOR
             }
           });
         })
@@ -70,19 +62,18 @@ export default class FirstOpen extends React.Component {
     }
   };
 
-
-  /* 
-    TODO: Complete SMS send
-  */
   sendCodeToPhoneNumber = async (URL) => {
-    return "OK";
-    /* try {
+    try {
       let response = await fetch(URL);
       let json = await response.json();
-      return json;
+      if (JSON.parse(json)) {
+        return json;
+      } else {
+        alert("مشکل در اتصال به سرور!");
+      }
     } catch (error) {
       return error;
-    } */
+    }
   };
 
   render() {
