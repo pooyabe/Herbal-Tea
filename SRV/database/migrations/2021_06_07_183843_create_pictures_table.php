@@ -15,6 +15,9 @@ class CreatePicturesTable extends Migration
     {
         Schema::create('pictures', function (Blueprint $table) {
             $table->id();
+            $table->string('phone');
+            $table->string('name')->nullable();
+            $table->string('file_path')->nullable();
             $table->timestamps();
         });
     }
