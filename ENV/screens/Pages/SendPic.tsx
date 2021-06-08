@@ -12,12 +12,14 @@ import {
 } from "react-native";
 import { Modal, Portal, Button, Provider } from "react-native-paper";
 
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import * as ImagePicker from "expo-image-picker";
 
 /**
  * Default images import
  */
-
 import defaultFrontImage from "../../assets/image/Front.jpg";
 import defaultEdgeImage from "../../assets/image/Kenar.jpg";
 
@@ -35,9 +37,18 @@ export default function ImagePickerExample() {
   /**
    * Modal
    */
+  // Choose modal
   const [visible, setVisible] = React.useState(false);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
+
+  // Upload Status modal
+  const [Uploadvisible, setUploadVisible] = React.useState(false);
+  const [UploadText, setUploadText] = React.useState("");
+  const showUploadModal = () => setUploadVisible(true);
+  const hideUploadModal = () => setUploadVisible(false);
+
+  // Modals style
   const containerStyle = {
     backgroundColor: "white",
     padding: 20,
@@ -109,7 +120,6 @@ export default function ImagePickerExample() {
       }
     }
 
-
     // Show upload button
     showUploadButton();
   };
@@ -117,12 +127,84 @@ export default function ImagePickerExample() {
   /**
    * Show upload button if both pictures selected
    */
-  const showUploadButton = () =>{
+  const showUploadButton = () => {
     const cia = choosedImages;
-    if(cia[0] && cia[1]){
+    if (cia[0] && cia[1]) {
       setShowSendButton(true);
     }
-  }
+  };
+
+  /**
+   * Upload the images
+   */
+  let uploadimage = async () => {
+    setUploadText("در حال ارسال ، لطفا صبر کنید...");
+    showUploadModal();
+
+    const PHONE_NUMBER = await AsyncStorage.getItem("@phone");
+
+    var check = 1;
+
+    for (var i = 0; i <= 1; i++) {
+      
+      // Switch between front and edge images
+      if (!i) {
+        var image = imageFront;
+        var side = "front";
+      } else {
+        var image = imageEdge;
+        var side = "edge";
+      }
+
+      // Get image attrs
+      let localUri = image.uri;
+      let fileName = localUri.split("/").pop();
+      let match = /\.(\w+)$/.exec(fileName);
+      let type = match ? `image/${match[1]}` : `image`;
+      let sendWithThisName = PHONE_NUMBER + "-" + side + "." + match[1];
+
+      //If file selected then create FormData
+      var fileToUpload = {
+        uri: localUri,
+        name: sendWithThisName,
+        type: type,
+      };
+      var data = new FormData();
+      data.append("file", fileToUpload);
+
+      // Send phone number
+      data.append("phone", PHONE_NUMBER);
+
+      // Upload Data
+      try {
+        let res = await fetch(
+          //FIXME Correct this address
+          "http://192.168.1.107:8000/customer/data/upload-file",
+          {
+            method: "post",
+            body: data,
+            headers: {
+              "Content-Type": "multipart/form-data; ",
+            },
+          }
+        );
+        let responseJson = await res.json();
+
+        if (!responseJson.status) {
+          check = 0;
+          break;
+        }
+      } catch (error) {
+        check = 0;
+        break;
+      }
+    }
+    if (check) {
+      setUploadText("تصاویر با موفقیت ارسال شدند.");
+    } else {
+      setUploadText("مشکلی در ارسال تصاویر به وجود آمد! لطفا مجددا تلاش کنید.");
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -150,6 +232,15 @@ export default function ImagePickerExample() {
           >
             <Text style={styles.modalChoiceText}>عکس از رو به رو</Text>
           </TouchableOpacity>
+        </Modal>
+
+        {/* Sending text modal */}
+        <Modal
+          visible={Uploadvisible}
+          onDismiss={hideUploadModal}
+          contentContainerStyle={containerStyle}
+        >
+          <Text>{UploadText}</Text>
         </Modal>
       </Portal>
 
@@ -198,6 +289,7 @@ export default function ImagePickerExample() {
             mode="contained"
             icon="send-check-outline"
             style={[styles.buttonSend]}
+            onPress={uploadimage}
           >
             ارسال تصاویر
           </Button>
