@@ -52,6 +52,14 @@ export default function ImagePickerExample() {
   // Choose pick from gallery or camera
   const [chooseInput, setChooseInput] = React.useState("");
 
+  // Check if send button must show or not
+  const [showSendButton, setShowSendButton] = React.useState(false);
+  // Check if both images picked or not
+  const [choosedImages, setChoosedImages] = React.useState([
+    0, // Edge
+    0, // Front
+  ]);
+
   // Access Permissions
   useEffect(() => {
     (async () => {
@@ -86,14 +94,35 @@ export default function ImagePickerExample() {
       });
 
       if (!result.cancelled) {
+        let cia = choosedImages;
         if (chooseSide == "Edge") {
+          cia[0] = 1;
+          setChoosedImages(cia);
+
           setImageEdge(result);
         } else if (chooseSide == "Front") {
+          cia[1] = 1;
+          setChoosedImages(cia);
+
           setImageFront(result);
         }
       }
     }
+
+
+    // Show upload button
+    showUploadButton();
   };
+
+  /**
+   * Show upload button if both pictures selected
+   */
+  const showUploadButton = () =>{
+    const cia = choosedImages;
+    if(cia[0] && cia[1]){
+      setShowSendButton(true);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -162,6 +191,18 @@ export default function ImagePickerExample() {
           گرفتن عکس
         </Button>
       </View>
+      {showSendButton && (
+        <View style={styles.buttonSendContainer}>
+          <Button
+            theme={{ roundness: 5 }}
+            mode="contained"
+            icon="send-check-outline"
+            style={[styles.buttonSend]}
+          >
+            ارسال تصاویر
+          </Button>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
