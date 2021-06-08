@@ -1,3 +1,6 @@
+//TODO increase allowed date period
+//TODO improve style, if you can! at least change send button icon
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import { View, StyleSheet, Text, ImageBackground } from "react-native";

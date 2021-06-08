@@ -1,3 +1,5 @@
+//TODO Check for allowed date period
+
 import React, { useState, useEffect } from "react";
 import {
   Image,
