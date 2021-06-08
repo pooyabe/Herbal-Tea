@@ -14,14 +14,23 @@ import { Modal, Portal, Button, Provider } from "react-native-paper";
 
 import * as ImagePicker from "expo-image-picker";
 
+/**
+ * Default images import
+ */
+
+import defaultFrontImage from "../../assets/image/Front.jpg";
+import defaultEdgeImage from "../../assets/image/Kenar.jpg";
+
 export default function ImagePickerExample() {
   /**
    * Default images
    */
-  const [imageUri, setImageUri] = useState([
-    require("../../assets/image/Front.jpg"),
-    require("../../assets/image/Kenar.jpg"),
-  ]);
+  const [imageFront, setImageFront] = useState({
+    uri: Image.resolveAssetSource(defaultFrontImage).uri,
+  });
+  const [imageEdge, setImageEdge] = useState({
+    uri: Image.resolveAssetSource(defaultEdgeImage).uri,
+  });
 
   /**
    * Modal
@@ -34,7 +43,56 @@ export default function ImagePickerExample() {
     padding: 20,
     width: 80 + "%",
     marginLeft: 10 + "%",
-    borderRadius: 5
+    borderRadius: 5,
+  };
+
+  /**
+   * Backend Jobs
+   */
+  // Choose pick from gallery or camera
+  const [chooseInput, setChooseInput] = React.useState("");
+
+  // Access Permissions
+  useEffect(() => {
+    (async () => {
+      // Files Permission
+      var { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        alert("برای دسترسی به تصاویر به مجوز شما نیاز داریم!");
+      }
+      // Camera Permission
+      var { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== "granted") {
+        alert("برای گرفتن عکس به مجوز شما نیاز داریم!");
+      }
+    })();
+  }, []);
+
+  // Pick Image
+  const pickImage = async (chooseSide) => {
+    if (chooseInput == "Camera") {
+      let result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        quality: 0.5,
+        aspect: [1, 2],
+      });
+    } else if (chooseInput == "Gallery") {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        quality: 0.5,
+        aspect: [1, 2],
+      });
+
+      if (!result.cancelled) {
+        if (chooseSide == "Edge") {
+          setImageEdge(result);
+        } else if (chooseSide == "Front") {
+          setImageFront(result);
+        }
+      }
+    }
   };
 
   return (
@@ -45,10 +103,22 @@ export default function ImagePickerExample() {
           onDismiss={hideModal}
           contentContainerStyle={containerStyle}
         >
-          <TouchableOpacity style={styles.modalChoice}>
+          <TouchableOpacity
+            style={styles.modalChoice}
+            onPress={() => {
+              hideModal();
+              pickImage("Edge");
+            }}
+          >
             <Text style={styles.modalChoiceText}>عکس از بغل</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.modalChoice}>
+          <TouchableOpacity
+            style={styles.modalChoice}
+            onPress={() => {
+              hideModal();
+              pickImage("Front");
+            }}
+          >
             <Text style={styles.modalChoiceText}>عکس از رو به رو</Text>
           </TouchableOpacity>
         </Modal>
@@ -58,11 +128,13 @@ export default function ImagePickerExample() {
         <Text style={styles.topHelpText}>
           در این صفحه می‌توانید در دوره‌های بیست روزه ، تصاویر خود را ثبت کنید
           تا برای مشاور ارسال شود.
+          {"\n"}
+          پس از انتخاب هر دو عکس ، گزینه ارسال فعال می‌شود.
         </Text>
       </View>
       <View style={styles.topContainer}>
-        <Image source={imageUri[0]} style={styles.imageTop} />
-        <Image source={imageUri[1]} style={styles.imageTop} />
+        <Image source={{ uri: imageFront.uri }} style={styles.imageTop} />
+        <Image source={{ uri: imageEdge.uri }} style={styles.imageTop} />
       </View>
       <View style={styles.bottomContainer}>
         <Button
@@ -70,7 +142,10 @@ export default function ImagePickerExample() {
           mode="contained"
           icon="image-multiple-outline"
           style={styles.buttonPick}
-          onPress={showModal}
+          onPress={() => {
+            showModal();
+            setChooseInput("Gallery");
+          }}
         >
           انتخاب از گالری
         </Button>
@@ -79,7 +154,10 @@ export default function ImagePickerExample() {
           mode="contained"
           icon="camera-enhance-outline"
           style={[styles.buttonPick, styles.cameraButton]}
-          onPress={showModal}
+          onPress={() => {
+            showModal();
+            setChooseInput("Camera");
+          }}
         >
           گرفتن عکس
         </Button>
@@ -123,8 +201,9 @@ const styles = StyleSheet.create({
   },
   imageTop: {
     width: 50 + "%",
+    height: 100 + "%",
     resizeMode: "center",
-    borderRadius: 10
+    borderRadius: 10,
   },
   bottomContainer: {
     width: 95 + "%",
@@ -151,5 +230,14 @@ const styles = StyleSheet.create({
   modalChoiceText: {
     fontFamily: "Kalameh",
     fontSize: 15,
+  },
+
+  buttonSendContainer: {
+    marginTop: 10,
+    width: 95 + "%",
+  },
+  buttonSend: {
+    width: 100 + "%",
+    backgroundColor: "rgba(100,150,100,1)",
   },
 });
