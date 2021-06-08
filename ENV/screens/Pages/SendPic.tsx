@@ -1,91 +1,155 @@
 import React, { useState, useEffect } from "react";
-import { Button, Image, View, Platform, Text } from "react-native";
+import {
+  Image,
+  View,
+  Platform,
+  Text,
+  StyleSheet,
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { Modal, Portal, Button, Provider } from "react-native-paper";
+
 import * as ImagePicker from "expo-image-picker";
 
 export default function ImagePickerExample() {
-  const [image, setImage] = useState(null);
-  const [text, setText] = useState("");
+  /**
+   * Default images
+   */
+  const [imageUri, setImageUri] = useState([
+    require("../../assets/image/Front.jpg"),
+    require("../../assets/image/Kenar.jpg"),
+  ]);
 
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS !== "web") {
-        const { status } =
-          await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== "granted") {
-          alert("Sorry, we need camera roll permissions to make this work!");
-        }
-      }
-    })();
-  }, []);
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      setImage(result);
-    }
-  };
-
-  let uploadimage = async () => {
-    //Check if any file is selected or not
-    if (image != null) {
-      setText("در حال ارسال");
-
-      // Image data
-      let localUri = image.uri;
-      let fileName = localUri.split("/").pop();
-      let match = /\.(\w+)$/.exec(fileName);
-      let type = match ? `image/${match[1]}` : `image`;
-
-      //If file selected then create FormData
-      const fileToUpload = {
-        uri: localUri,
-        name: fileName,
-        type: type,
-      };
-      const data = new FormData();
-      data.append("file", fileToUpload);
-
-      let res = await fetch(
-        "http://192.168.1.107:8000/customer/data/upload-file",
-        {
-          method: "post",
-          body: data,
-          headers: {
-            "Content-Type": "multipart/form-data; ",
-          },
-        }
-      );
-      let responseJson = await res.json();
-
-      if (responseJson.status) {
-        setText("ارسال موفقیت آمیز بود");
-      } else {
-        setText("ارسال با مشکل مواجه شد");
-      }
-    } else {
-      //if no file selected the show alert
-      alert("Please Select File first");
-    }
+  /**
+   * Modal
+   */
+  const [visible, setVisible] = React.useState(false);
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+  const containerStyle = {
+    backgroundColor: "white",
+    padding: 20,
+    width: 80 + "%",
+    marginLeft: 10 + "%",
+    borderRadius: 5
   };
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      <Button title="SEND" onPress={uploadimage} />
-      {image && (
-        <Image
-          source={{ uri: image.uri }}
-          style={{ width: 200, height: 200 }}
-        />
-      )}
+    <SafeAreaView style={styles.container}>
+      <Portal>
+        <Modal
+          visible={visible}
+          onDismiss={hideModal}
+          contentContainerStyle={containerStyle}
+        >
+          <TouchableOpacity style={styles.modalChoice}>
+            <Text style={styles.modalChoiceText}>عکس از بغل</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.modalChoice}>
+            <Text style={styles.modalChoiceText}>عکس از رو به رو</Text>
+          </TouchableOpacity>
+        </Modal>
+      </Portal>
 
-      <Text>{text}</Text>
-    </View>
+      <View style={styles.topHelp}>
+        <Text style={styles.topHelpText}>
+          در این صفحه می‌توانید در دوره‌های بیست روزه ، تصاویر خود را ثبت کنید
+          تا برای مشاور ارسال شود.
+        </Text>
+      </View>
+      <View style={styles.topContainer}>
+        <Image source={imageUri[0]} style={styles.imageTop} />
+        <Image source={imageUri[1]} style={styles.imageTop} />
+      </View>
+      <View style={styles.bottomContainer}>
+        <Button
+          theme={{ roundness: 5 }}
+          mode="contained"
+          icon="image-multiple-outline"
+          style={styles.buttonPick}
+          onPress={showModal}
+        >
+          انتخاب از گالری
+        </Button>
+        <Button
+          theme={{ roundness: 5 }}
+          mode="contained"
+          icon="camera-enhance-outline"
+          style={[styles.buttonPick, styles.cameraButton]}
+          onPress={showModal}
+        >
+          گرفتن عکس
+        </Button>
+      </View>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(250,250,250,0.1)",
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  topHelp: {
+    width: 95 + "%",
+    backgroundColor: "rgb(250,100,100)",
+    borderRadius: 10,
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingRight: 10,
+    paddingLeft: 10,
+  },
+  topHelpText: {
+    color: "#ffffff",
+    fontFamily: "Kalameh",
+    fontSize: 15,
+  },
+  topContainer: {
+    flex: 1.5,
+    width: 100 + "%",
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row",
+    paddingTop: 5,
+    justifyContent: "space-around",
+    overflow: "hidden",
+  },
+  imageTop: {
+    width: 50 + "%",
+    resizeMode: "center",
+    borderRadius: 10
+  },
+  bottomContainer: {
+    width: 95 + "%",
+    paddingTop: 5 + "%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  buttonPick: {
+    width: 49 + "%",
+  },
+  cameraButton: {
+    backgroundColor: "rgb(100,150,250)",
+  },
+
+  modalChoice: {
+    padding: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#ccc",
+  },
+  modalChoiceText: {
+    fontFamily: "Kalameh",
+    fontSize: 15,
+  },
+});
