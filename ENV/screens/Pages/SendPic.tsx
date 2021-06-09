@@ -1,5 +1,3 @@
-//TODO Check for allowed date period
-
 import React, { useState, useEffect } from "react";
 import {
   Image,
@@ -146,6 +144,7 @@ export default function ImagePickerExample() {
     const PHONE_NUMBER = await AsyncStorage.getItem("@phone");
 
     var check = 1;
+    var remains = 0;
 
     for (var i = 0; i <= 1; i++) {
       
@@ -192,18 +191,22 @@ export default function ImagePickerExample() {
         );
         let responseJson = await res.json();
 
-        if (!responseJson.status) {
-          check = 0;
-          break;
-        }
+          if(responseJson.status == 2){
+            check = 2;
+            remains = responseJson.remain;
+            break;
+          }
+
       } catch (error) {
         check = 0;
         break;
       }
     }
-    if (check) {
+    if (check == 1) {
       setUploadText("تصاویر با موفقیت ارسال شدند.");
-    } else {
+    }else if(check == 2){
+      setUploadText(`شما قبلا تصاویر این دوره زمانی را ارسال فرموده‌اید.\nلطفا ${remains} روز دیگر مراجعه فرمایید.`);
+    }else {
       setUploadText("مشکلی در ارسال تصاویر به وجود آمد! لطفا مجددا تلاش کنید.");
     }
   };

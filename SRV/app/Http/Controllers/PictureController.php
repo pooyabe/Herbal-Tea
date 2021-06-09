@@ -1,5 +1,3 @@
-//TODO Check for allowed date period
-
 <?php
 
 namespace App\Http\Controllers;
@@ -9,16 +7,6 @@ use Illuminate\Http\Request;
 
 class PictureController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('file-upload');
-    }
-
     public function upload(Request $req)
     {
         /**
@@ -28,32 +16,61 @@ class PictureController extends Controller
          * */
         header('Content-type: application/json');
 
-        $req->validate([
-            'file' => 'required|image|max:12000'
-        ]);
+        /**
+         * Check for period data request
+         */
 
-        $fileModel = new Picture;
+        $CHECK = Picture::where('phone', $req->phone)->count();
 
-        
-        if ($req->file()) {
-            $fileName = time() . '_' . $req->file->getClientOriginalName();
-            $filePath = $req->file->move(public_path('images'), $fileName);
-
-            $fileModel->phone = $req->phone;
-            $fileModel->name = time() . '_' . $req->file->getClientOriginalName();
-            $fileModel->file_path = '/public/images/' . $filePath;
-            $fileModel->save();
-
-            $out['status'] = 1;
+        /**
+         * If there was just one pic today, so there is no problem! (i think!!!)
+         */
+        $NUMBER_OF_TODAY_PICS = Picture::where('phone', $req->phone)->where('created_at', '>=', date('Y-m-d') . ' 00:00:00')->count();
+        if ($NUMBER_OF_TODAY_PICS == 1) {
+            $CHECK = 0;
         }
 
-        return json_encode($out);
-    }
+        if ($CHECK > 0) {
+            $TODAY = date('Y-m-d H:m:s');
+            $TOMMOROW = date('Y-m-d', strtotime($TODAY . ' +1 days'));
 
-    public function csrf()
-    {
-        header("Content-type: application/json");
+            $GetlastRecordDate = Picture::where('phone', $req->phone)->orderBy('created_at', 'desc')->get('created_at')->take(1);
+            $lastRecordDate = $GetlastRecordDate[0]['created_at'];
 
-        return json_encode(csrf_token());
+            $diff = abs(strtotime($TOMMOROW) - strtotime($lastRecordDate));
+            $calc_remain = intval(20 - ($diff / 86400));
+        } else {
+            $calc_remain = 0;
+        }
+
+        $OUT['status'] = 0;
+
+        if ($calc_remain <= 0) {
+
+            $req->validate([
+                'file' => 'required|image|max:12000'
+            ]);
+
+            $fileModel = new Picture;
+
+
+            if ($req->file()) {
+                $fileName = time() . '_' . $req->file->getClientOriginalName();
+                $filePath = $req->file->move(public_path('images'), $fileName);
+
+                $fileModel->phone = $req->phone;
+                $fileModel->name = time() . '_' . $req->file->getClientOriginalName();
+                $fileModel->file_path = '/public/images/' . $filePath;
+                $fileModel->save();
+
+                $out['status'] = 1;
+            }
+        } else {
+            //2 means two times data in one period!
+            $OUT['status'] = 2;
+            $OUT['remain'] = intval($calc_remain);
+        }
+
+        return json_encode($OUT);
     }
 }
