@@ -22,12 +22,28 @@ class SizeController extends Controller
         header('Content-type: application-json');
 
         /**
-         * Check for same day data
+         * Check for period data request
          */
-        $CHECK = Size::where('phone', $request->phone)->whereDate('created_at', date('Y-m-d'))->count();
 
-        // return $TODAY;
-        if ($CHECK == 0) {
+        $CHECK = Size::where('phone', $request->phone)->count();
+        if ($CHECK > 0){
+            $TODAY = date('Y-m-d H:m:s');
+            $TOMMOROW = date('Y-m-d', strtotime($TODAY . ' +1 days'));
+    
+            $GetlastRecordDate = Size::where('phone', $request->phone)->orderBy('created_at', 'desc')->get('created_at')->take(1);
+            $lastRecordDate = $GetlastRecordDate[0]['created_at'];
+    
+            $diff = abs(strtotime($TOMMOROW) - strtotime($lastRecordDate));
+            $calc_remain = intval(7 - ($diff / 86400));
+        }else{
+            $calc_remain = 0;
+        }
+
+
+
+        $OUT['status'] = 0;
+
+        if ($calc_remain <= 0) {
             $NEW_DATA = new Size;
 
             // SET DATA RECEIVED
@@ -40,14 +56,17 @@ class SizeController extends Controller
 
             try {
                 $NEW_DATA->save();
-                return 1;
+                $OUT['status'] = 1;
+                return json_encode($OUT);
             } catch (\Throwable $th) {
-                return 0;
+                // return json_encode($OUT);
             }
         } else {
-            //2 means two times data in one day!
-            return 2;
+            //2 means two times data in one period!
+             $OUT['status'] = 2;
+             $OUT['remain'] = intval($calc_remain);
         }
+        return json_encode($OUT);
     }
 
     /**
@@ -83,7 +102,7 @@ class SizeController extends Controller
                 'Ran' => $Ran,
                 'Bazoo' => $Bazoo
             ];
-            
+
             return json_encode($OUT);
         } else {
             return 0;
