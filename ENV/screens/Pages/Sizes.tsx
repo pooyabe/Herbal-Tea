@@ -1,4 +1,3 @@
-//TODO increase allowed date period
 //TODO improve style, if you can! at least change send button icon
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -42,7 +41,7 @@ export default class Sizes extends React.Component {
       ran != 0
     ) {
       this.sendData(PHONE_NUMBER, shekam, kamar, bazoo, ran).then((r) => {
-        if (r == 1) {
+        if (r['status'] == 1) {
           /**
            * 
            * Sent successfully. reset form data
@@ -56,8 +55,9 @@ export default class Sizes extends React.Component {
             ran: null,
           });
           this.onShowSnackBar();
-        }else if(r == 2){
-          this.setState({ snackText: "شما قبلا داده‌های امروز را وارد کرده‌اید." });
+        }else if(r['status'] == 2){
+          const remains = r['remain'];
+          this.setState({ snackText: `داده‌های دوره زمانی قبلا وارد شده. \n لطفا ${remains} روز دیگر مراجعه فرمایید.` });
           this.onShowSnackBar();
         } else {
           this.setState({ snackText: "اتصال اینترنت خود را بررسی کنید." });
