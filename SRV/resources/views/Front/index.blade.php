@@ -8,31 +8,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
     <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{asset('assets/vendor/bootstrap/css/bootstrap.min.css')}}">
     <!-- Owl Carousel-->
-    <link rel="stylesheet" href="vendor/owl.carousel2/assets/owl.carousel.css">
-    <link rel="stylesheet" href="vendor/owl.carousel2/assets/owl.theme.default.css">
+    <link rel="stylesheet" href="{{asset('assets/vendor/owl.carousel2/assets/owl.carousel.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/vendor/owl.carousel2/assets/owl.theme.default.css')}}">
     <!-- Modal Video-->
-    <link rel="stylesheet" href="vendor/modal-video/css/modal-video.min.css">
+    <link rel="stylesheet" href="{{asset('assets/vendor/modal-video/css/modal-video.min.css')}}">
     <!-- Google fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,600,800&amp;display=swap">
     <!-- Device Mockup-->
-    <link rel="stylesheet" href="css/device-mockups.css">
+    <link rel="stylesheet" href="{{asset('assets/css/device-mockups.css')}}">
     <!-- theme stylesheet-->
-    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="{{asset('assets/css/style.pink.css')}}" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="{{asset('assets/css/custom.css')}}">
     <!-- Favicon-->
-    <link rel="shortcut icon" href="img/favicon.png">
-    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <link rel="shortcut icon" href="{{asset('assets/img/favicon.png')}}">
   </head>
   <body>
     <!-- navbar-->
     <header class="header">
       <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container"><a class="navbar-brand" href="#"><img src="img/logo.svg" alt="" width="110"></a>
+        <div class="container"><a class="navbar-brand" href="#"><img src="{{asset('assets/img/logo.svg')}}" alt="" width="110"></a>
           <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
@@ -46,7 +43,7 @@
       </nav>
     </header>
     <!-- Hero Section-->
-    <section class="hero bg-top" id="hero" style="background: url(img/banner-4.png) no-repeat; background-size: 100% 80%">
+    <section class="hero bg-top" id="hero" style="background: url({{asset('assets/img/banner-4.png')}}) no-repeat; background-size: 100% 80%">
       <div class="container">
         <div class="row py-5">
           <div class="col-lg-5 py-5">
@@ -60,14 +57,14 @@
           <div class="col-lg-6 ml-auto">
             <div class="device-wrapper mx-auto">
               <div class="device shadow" data-device="iPhoneX" data-orientation="portrait" data-color="black">
-                <div class="screen"><img class="img-fluid" src="img/mobile.png" alt=""></div>
+                <div class="screen"><img class="img-fluid" src="{{asset('assets/img/mobile.png')}}" alt=""></div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <section class="bg-center py-0" id="about" style="background: url(img/service-bg.svg) no-repeat; background-size: cover">
+    <section class="bg-center py-0" id="about" style="background: url({{asset('assets/img/service-bg.svg')}}) no-repeat; background-size: cover">
       <section class="about py-0">
         <div class="container">
           <p class="h6 text-uppercase text-primary">Services</p>
@@ -115,7 +112,7 @@
       <section class="with-pattern-1" id="services">
         <div class="container">
           <div class="row align-items-center mb-5">
-            <div class="col-lg-6 mb-5 mb-lg-0"><img class="img-fluid w-100 px-lg-5" src="img/objects.svg" alt=""></div>
+            <div class="col-lg-6 mb-5 mb-lg-0"><img class="img-fluid w-100 px-lg-5" src="{{asset('assets/img/objects.svg')}}" alt=""></div>
             <div class="col-lg-6">
               <h2>The Best Business Solutions Guide for You</h2>
               <p class="text-muted">Dolor sit amet consectetur elit sed do eiusmod tempor incididunt labore dolore magna aliqua enim ad minim veniam quis nostrud exercitation.</p>
@@ -189,7 +186,7 @@
         </div>
       </section>
     </section>
-    <section class="p-0" id="testimonials" style="background: url(img/testimonials-bg.png) no-repeat; background-size: 40% 100%; background-position: left center">
+    <section class="p-0" id="testimonials" style="background: url({{asset('assets/img/testimonials-bg.png')}}) no-repeat; background-size: 40% 100%; background-position: left center">
       <div class="container text-center">
         <p class="h6 text-uppercase text-primary">Testimonials</p>
         <h2 class="mb-5">What Our Clients Says?</h2>
@@ -199,7 +196,7 @@
               <div class="mx-3 mx-lg-5 my-5 pt-3">
                 <div class="card shadow rounded-lg px-4 py-5 px-lg-5 with-pattern bg-white border-0">
                   <div class="card-body index-forward pt-5 rounded-lg">
-                    <div class="testimonial-img"><img class="rounded-circle" src="img/avatar-1.jpg" alt=""/></div>
+                    <div class="testimonial-img"><img class="rounded-circle" src="{{asset('assets/img/avatar-1.jpg')}}" alt=""/></div>
                     <p class="lead text-muted mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
                     <h5 class="font-weight-bold mb-0">Sarah Hudson</h5>
                     <p class="text-primary mb-0 text-small">Tech Developer</p>
@@ -209,7 +206,7 @@
               <div class="mx-3 mx-lg-5 my-5 pt-3">
                 <div class="card shadow rounded-lg px-4 py-5 px-lg-5 with-pattern bg-white border-0">
                   <div class="card-body index-forward pt-5 rounded-lg">
-                    <div class="testimonial-img"><img class="rounded-circle" src="img/avatar-2.png" alt=""/></div>
+                    <div class="testimonial-img"><img class="rounded-circle" src="{{asset('assets/img/avatar-2.png')}}" alt=""/></div>
                     <p class="lead text-muted mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
                     <h5 class="font-weight-bold mb-0">Frank Smith</h5>
                     <p class="text-primary mb-0 text-small">Tech Developer</p>
@@ -219,7 +216,7 @@
               <div class="mx-3 mx-lg-5 my-5 pt-3">
                 <div class="card shadow rounded-lg px-4 py-5 px-lg-5 with-pattern bg-white border-0">
                   <div class="card-body index-forward pt-5 rounded-lg">
-                    <div class="testimonial-img"><img class="rounded-circle" src="img/avatar-1.jpg" alt=""/></div>
+                    <div class="testimonial-img"><img class="rounded-circle" src="{{asset('assets/img/avatar-1.jpg')}}" alt=""/></div>
                     <p class="lead text-muted mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
                     <h5 class="font-weight-bold mb-0">Sarah Hudson</h5>
                     <p class="text-primary mb-0 text-small">Tech Developer</p>
@@ -229,7 +226,7 @@
               <div class="mx-3 mx-lg-5 my-5 pt-3">
                 <div class="card shadow rounded-lg px-4 py-5 px-lg-5 with-pattern bg-white border-0">
                   <div class="card-body index-forward pt-5 rounded-lg">
-                    <div class="testimonial-img"><img class="rounded-circle" src="img/avatar-2.png" alt=""/></div>
+                    <div class="testimonial-img"><img class="rounded-circle" src="{{asset('assets/img/avatar-2.png')}}" alt=""/></div>
                     <p class="lead text-muted mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
                     <h5 class="font-weight-bold mb-0">Frank Smith</h5>
                     <p class="text-primary mb-0 text-small">Tech Developer</p>
@@ -244,7 +241,7 @@
     <footer class="with-pattern-1 position-relative">
       <div class="container section-padding-y">
         <div class="row">
-          <div class="col-lg-3 mb-4 mb-lg-0"><img class="mb-4" src="img/logo.svg" alt="" width="110">
+          <div class="col-lg-3 mb-4 mb-lg-0"><img class="mb-4" src="{{asset('assets/img/logo.svg')}}" alt="" width="110">
             <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
           </div>
           <div class="col-lg-2 mb-4 mb-lg-0">
@@ -292,11 +289,11 @@
       </div>
     </footer>
     <!-- JavaScript files-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="vendor/owl.carousel2/owl.carousel.min.js"></script>
-    <script src="vendor/modal-video/js/modal-video.js"></script>
-    <script src="js/front.js"></script>
+    <script src="{{asset('assets/vendor/jquery/jquery.min.js')}}"></script>
+    <script src="{{asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('assets/vendor/owl.carousel2/owl.carousel.min.js')}}"></script>
+    <script src="{{asset('assets/vendor/modal-video/js/modal-video.js')}}"></script>
+    <script src="{{asset('assets/js/front.js')}}"></script>
     <script>
       // ------------------------------------------------------- //
       //   Inject SVG Sprite - 
