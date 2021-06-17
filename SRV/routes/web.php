@@ -42,3 +42,13 @@ Route::prefix('/customer')->name('customer.')->group(function () {
         Route::post('/upload-file', [\App\Http\Controllers\PictureController::class, 'upload']);
     });
 });
+
+
+
+
+/**
+ * Admin Panel
+ */
+Route::prefix('/admin')->name('admin.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\AdminController::class, 'index'])->name('index');
+});
