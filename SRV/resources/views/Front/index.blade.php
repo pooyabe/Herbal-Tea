@@ -47,11 +47,12 @@
       <div class="container">
         <div class="row py-5">
           <div class="col-lg-5 py-5">
-            <h1 class="font-weight-bold">Download your best app landing</h1>
-            <p class="my-4 text-muted">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod.</p>
+            <h1 class="font-weight-bold">مشاوره و فروش در زمینه لاغری</h1>
+            <p class="my-4 text-muted">چربی بیار ، عضله با چاشنی اعتماد به نفس ببر!</p>
             <ul class="list-inline mb-0">
-              <li class="list-inline-item mb-2 mb-lg-0"><a class="btn btn-primary btn-lg px-4" href="#"> <i class="fab fa-google-play mr-3"></i>Google Play</a></li>
-              <li class="list-inline-item"><a class="btn btn-primary btn-lg px-4" href="#"> <i class="fab fa-app-store mr-3"></i>App Store</a></li>
+              {{-- //FIXME Fix this 2 buttons links  --}}
+              <li class="list-inline-item mb-2 mb-lg-0"><a class="btn btn-primary btn-lg px-4" href="#"> <i class="fab fa-google-play mr-3"></i>دانلود اپلیکیشن</a></li>
+              <li class="list-inline-item"><a class="btn btn-primary btn-lg px-4" href="#"> <i class="fa fa-child mr-3"></i>مشاوره</a></li>
             </ul>
           </div>
           <div class="col-lg-6 ml-auto">
