@@ -32,6 +32,7 @@ Route::prefix('/customer')->name('customer.')->group(function () {
     
     Route::get('namecheck/{phone}', [\App\Http\Controllers\CustomerController::class, 'checkName']);
 
+    Route::get('store-name/{phone}/{code}', [\App\Http\Controllers\CustomerController::class, 'storeName']);
 
     /**
      * Customer data management

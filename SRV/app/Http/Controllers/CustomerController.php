@@ -58,7 +58,7 @@ class CustomerController extends Controller
         try {
 
             $Customer->save();
-            
+
             /**
              * Create new Validation Code for new User
              */
@@ -147,6 +147,30 @@ class CustomerController extends Controller
         if ($check != '') {
             return 1;
         } else {
+            return 0;
+        }
+    }
+
+    /**
+     * 
+     * Store new customer name
+     * 
+     */
+    public function storeName($phone, $name)
+    {
+        /**
+         * 
+         *  Set content type of page
+         * 
+         * */
+        header('Content-type: application-json');
+
+        try {
+            Customer::where('phone', $phone)
+                ->update(['name' => $name]);
+
+            return 1;
+        } catch (\Throwable $th) {
             return 0;
         }
     }
