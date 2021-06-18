@@ -23,12 +23,14 @@ Route::get('/', function () {
 Route::prefix('/customer')->name('customer.')->group(function () {
 
     /**
-     * User Registration, valifation and login.
+     * User Registration, validation and login.
      */
 
     Route::get('login-request/{phone}', [\App\Http\Controllers\CustomerController::class, 'request']);
 
     Route::get('validate/{phone}/{code}', [\App\Http\Controllers\CustomerController::class, 'validation']);
+    
+    Route::get('namecheck/{phone}', [\App\Http\Controllers\CustomerController::class, 'checkName']);
 
 
     /**

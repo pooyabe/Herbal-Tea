@@ -87,7 +87,6 @@ class CustomerController extends Controller
              * 
              */
             return $this->send_code($phone, $THE_CODE);
-
         } catch (\Throwable $th) {
             return redirect()->route('home');
         }
@@ -118,10 +117,35 @@ class CustomerController extends Controller
          * */
         $Check = Customer::where('phone', $phone)->get('Code')[0]->Code;
 
-        if($Check == $code){
+        if ($Check == $code) {
             return json_encode(1);
-        }else{
+        } else {
             return json_encode(0);
+        }
+    }
+
+
+    /**
+     * 
+     * Check if customers name exists or not
+     * 
+     */
+    public function checkName($phone)
+    {
+        /**
+         * 
+         *  Set content type of page
+         * 
+         * */
+        header('Content-type: application-json');
+
+
+        $check = Customer::where('phone', $phone)->get('name')[0]->name;
+
+        if ($check != '') {
+            return 1;
+        } else {
+            return 0;
         }
     }
 }
