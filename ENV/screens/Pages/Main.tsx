@@ -5,10 +5,12 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 
 import Sizes from "./Sizes";
 import Chart from "./Chart";
 import SendPic from "./SendPic";
+import LogOut from './LogOut'
 
 const Tab = createBottomTabNavigator();
 
@@ -37,18 +39,21 @@ export default function Index() {
                   color={color}
                 />
               );
+            } else if (route.name === "LogOut") {
+              return <AntDesign name="logout" size={size} color={color} />;
             }
           },
         })}
         tabBarOptions={{
           activeTintColor: "tomato",
           inactiveTintColor: "gray",
-          showLabel: !1
+          showLabel: !1,
         }}
       >
         <Tab.Screen name="Chart" component={Chart} />
         <Tab.Screen name="Sizes" component={Sizes} />
         <Tab.Screen name="SendPic" component={SendPic} />
+        <Tab.Screen name="LogOut" component={LogOut} options={{unmountOnBlur: true}}/>
       </Tab.Navigator>
     </>
   );
