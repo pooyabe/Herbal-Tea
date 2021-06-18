@@ -53,10 +53,12 @@ class CustomerController extends Controller
 
         $Customer->phone = $phone;
         $Customer->Code = '';
+        $Customer->name = '';
 
         try {
 
             $Customer->save();
+            
             /**
              * Create new Validation Code for new User
              */
