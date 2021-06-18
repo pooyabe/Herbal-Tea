@@ -1,13 +1,5 @@
 import * as React from "react";
-import {
-  StatusBar,
-  Text,
-  View,
-  TextInput,
-  Image,
-  TouchableOpacity,
-  DevSettings,
-} from "react-native";
+import { Text, View, TextInput, Image, TouchableOpacity } from "react-native";
 import { styles } from "./styles";
 
 import { LinearGradient } from "expo-linear-gradient";
@@ -59,8 +51,34 @@ export default class Confirm extends React.Component {
 
           AsyncStorage.setItem("@phone", String(RECEPTOR));
 
-          this.props.navigation.navigate("Index", {
-            screen: "Index",
+          /**
+           *
+           * Check if Customer's name exists in database or not
+           *
+           */
+
+          // Check user name existance in database by rest api
+          const CHECK_NAME_URL = `http://192.168.1.107:8000/customer/namecheck/${RECEPTOR}`;
+          this.checkNameExists(CHECK_NAME_URL).then((check_name) => {
+            if (check_name) {
+              /**
+               *
+               * Customer name exists, so return to main page
+               *
+               */
+              this.props.navigation.navigate("Index", {
+                screen: "Index",
+              });
+            } else {
+              /**
+               *
+               * Customer name does not exists, so return to name screen
+               *
+               */
+              this.props.navigation.navigate("Index", {
+                screen: "AddName",
+              });
+            }
           });
         } else {
           this.setState({ SignInButtonText: "بررسی" });
@@ -70,6 +88,16 @@ export default class Confirm extends React.Component {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  checkNameExists = async (URL) => {
+    try {
+      let response = await fetch(URL);
+      let json = await response.json();
+      return json;
+    } catch (error) {
+      return error;
+    }
   };
 
   validateTheCode = async (URL) => {
