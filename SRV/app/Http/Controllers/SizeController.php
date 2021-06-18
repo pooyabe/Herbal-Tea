@@ -52,6 +52,7 @@ class SizeController extends Controller
             $NEW_DATA->Bazoo = $request->bazoo;
             $NEW_DATA->Kamar = $request->kamar;
             $NEW_DATA->Ran = $request->ran;
+            $NEW_DATA->status = 0;
 
 
             try {

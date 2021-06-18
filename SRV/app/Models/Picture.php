@@ -11,6 +11,7 @@ class Picture extends Model
     protected $fillable = [
         'phone',
         'name',
-        'file_path'
+        'file_path',
+        'status'
     ];
 }

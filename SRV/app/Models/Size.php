@@ -13,7 +13,8 @@ class Size extends Model
         'Skekam',
         'Bazoo',
         'Kamar',
-        'Ran'
+        'Ran',
+        'status'
     ];
 
 }
