@@ -12,6 +12,7 @@ import Login from "./FirstOpen/Login";
 import ConfirmCode from "./FirstOpen/Confirm";
 import Main from "./Pages/Main";
 import FirstLoading from "./LoadingPage/FirstLoading";
+import Name from "./FirstOpen/Name";
 
 const Stack = createStackNavigator();
 
@@ -58,6 +59,7 @@ export default function Index() {
             <>
               <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="ConfirmCode" component={ConfirmCode} />
+              <Stack.Screen name="AddName" component={Name} />
             </>
           )}
         </Stack.Navigator>
